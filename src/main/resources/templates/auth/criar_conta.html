@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Conta</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="ispi-1">
+    <div class="ispi-container">
+        <h2>Criar Conta</h2>
+		<!-- Exibe o erro se houver -->
+		<p th:if="${erro}" style="color:red;" th:text="${erro}"></p>
+		<!-- Exibe de sucesso se houver -->
+		<p th:if="${sucesso}" style="color:blue;" th:text="${sucesso}"></p>
+				
+        <form method="POST" th:action="@{/criar-conta}">
+            <input type="text" class="ispi-input-1" name="nome" placeholder="Nome de usuário, primeiro e último" required><br>
+            <input type="email" class="ispi-input-1" name="email" placeholder="E-mail" required><br>
+            <input type="password" class="ispi-input-1" name="senha" placeholder="Senha" required><br>
+            <input type="password" class="ispi-input-1" name="senha_confirmada" placeholder="Confirmar Senha" required><br>
+            <button type="submit" class="ispi-button-1">Criar Conta</button>
+        </form>
+		<div class="ispi-link-1">
+			<p>Já tem uma conta? <a href="login">Faça login</a></p>
+		</div>
+    </div>
+	
+    <!-- Incluir o banner de cookies -->
+    <div th:replace="include/cookie-banner :: cookie-banner"></div>
+</body>
+</html>
+    

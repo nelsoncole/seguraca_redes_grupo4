@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificação de Código</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="ispi-3">
+    <div class="ispi-container-2">
+        <h2>Confirmação de E-mail</h2>
+        <br>
+
+        <!-- Exibe erro, se houver -->
+        <p th:if="${erro}" style="color:red;" th:text="${erro}"></p>
+        <p id="tempo"><span style="color: green;">Tempo restante 5 min e 0 s.</span></p>
+        <form method="POST" th:action="@{/verificar}">
+            <input type="hidden" name="destino" th:value="${destino}" />
+
+            <p><label for="codigo">Digite o código enviado para seu e-mail:</label></p>
+            <input type="number" 
+                class="ispi-input-1 ispi-input-1-c" 
+                name="codigo" 
+                id="codigo" 
+                placeholder="Código de verificação" 
+                required 
+                autocomplete="off" 
+                inputmode="numeric" 
+                pattern="[0-9]*"
+                maxlength="6"><br>
+
+            <button type="submit" class="ispi-button-2">Verificar</button>
+        </form>
+
+        <div class="ispi-link-1">
+            <p><a href="login">Cancelar</a></p>
+        </div>
+    </div>
+
+    <!-- Incluir o banner de cookies -->
+    <div th:replace="include/cookie-banner :: cookie-banner"></div>
+</body>
+<script th:inline="javascript">
+    let tempoRestante = 300-1; // 5 minutos
+
+    function atualizarTempoRestante() {
+        if (tempoRestante > 0) {
+            var minutos = Math.floor(tempoRestante / 60);
+            var segundos = tempoRestante % 60;
+            document.getElementById("tempo").innerHTML = "<span style='color: green;'>Tempo restante " + minutos + " min e " + segundos + " s.";
+            
+            tempoRestante--;
+        } else if(tempoRestante === 0){
+            document.getElementById("tempo").innerHTML = "<span style='color: red;'>Tempo expirou pedir outro codigo</span>";
+        }
+    }
+    // Atualiza o tempo restante a cada segundo
+    setInterval(atualizarTempoRestante, 1000);
+</script>
+</html>

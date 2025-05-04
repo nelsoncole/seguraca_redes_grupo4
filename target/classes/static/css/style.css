@@ -1,0 +1,152 @@
+/*Reset da formatação padrão*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+/*Esta class centraliza o conteudo de*/
+.ispi-1 {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ispi-2 {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+}
+
+/*Esta class centraliza o conteudo de */
+.ispi-3 {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: whitesmoke;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/*Cria uma caixina para input/output*/
+.ispi-container {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    text-align: center;
+    width: 360px;
+}
+
+/*Cria uma area com elementos justificado*/
+.ispi-container-2 {
+    text-align: justify;
+    width: 360px;
+    font-family: 'Roboto', sans-serif; /* Fonte limpa e moderna */
+    font-size: 14px; /* Tamanho de fonte agradável */
+    color: #333; /* Cor do texto para bom contraste */
+}
+
+/*Formatação do input*/
+.ispi-input-1 {
+    width: 90%;
+    margin: 8px 0;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: clamp(12px, 1.8vw, 14px); /*responsividade*/
+}
+
+/*Formatcao do ipunt centraliza o texto*/
+.ispi-input-1-c {
+    text-align: center;
+    font-family: 'Roboto', sans-serif; /* Fonte limpa e moderna */
+    font-size: 16px; /* Tamanho de fonte agradável */
+}
+
+/*Formatação do botão OK*/
+.ispi-button-1 {
+    padding: 10px 20px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: block;        /* faz ele ocupar toda a largura disponível */
+    margin: 0 auto;        /* centraliza horizontalmente */
+    width: auto;           /* largura automática, conforme o conteúdo */
+}
+
+.ispi-button-2 {
+    padding: 10px 20px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: block;
+    width: 90%;
+    font-family: 'Roboto', sans-serif; /* Fonte limpa e moderna */
+    font-size: 16px; /* Tamanho de fonte agradável */
+}
+
+.ispi-button-1:hover,
+.ispi-button-2:hover {
+    background-color: #1a996f;
+}
+
+.ispi-link-1 {
+    margin-top: 8px;
+}
+
+.erro {
+    color: red;
+    margin-bottom: 10px;
+}
+
+.navbar {
+    background-color: #333;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    display: flex;
+    justify-content: flex-end; /* alinha à direita */
+}
+
+.navbar a {
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+    border-left: 1px solid #444; /* linha separadora */
+}
+
+.navbar a:first-child {
+    border-left: none; /* remove a linha do primeiro */
+}
+
+.navbar a:hover {
+    background-color: #575757;
+}
+
+.content {
+    padding-top: 60px; /* espaço pro menu fixo */
+}

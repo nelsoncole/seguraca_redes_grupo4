@@ -1,0 +1,7 @@
+com\seguranca\redes\model\LoginTentativa.class
+com\seguranca\redes\model\Usuario.class
+com\seguranca\redes\SecurityConfig.class
+com\seguranca\redes\model\Usuario$NivelAcesso.class
+com\seguranca\redes\RedesApplication.class
+com\seguranca\redes\repository\UsuarioRepository.class
+com\seguranca\redes\controller\LoginController.class

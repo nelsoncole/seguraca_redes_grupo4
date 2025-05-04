@@ -1,0 +1,44 @@
+<!-- cookie-banner.php -->
+<div th:fragment="cookie-banner">
+    <div id="cookie-consent-banner">
+        Este site usa cookies para garantir a melhor experiência de navegação. 
+        Ao continuar navegando, você concorda com o uso de cookies. 
+        <button id="accept-cookies-btn">Aceitar</button>
+    </div>
+
+    <script>
+        // Verifica se o usuário já aceitou os cookies
+        if (localStorage.getItem("cookies_aceitos") === "true") {
+            document.getElementById("cookie-consent-banner").style.display = "none";
+        }
+
+        // Ao clicar em "Aceitar", o banner é ocultado e o consentimento é salvo
+        document.getElementById("accept-cookies-btn").addEventListener("click", function() {
+            localStorage.setItem("cookies_aceitos", "true");
+            document.getElementById("cookie-consent-banner").style.display = "none";
+        });
+    </script>
+
+    <style>
+        #cookie-consent-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 14px;
+            z-index: 1000;
+        }
+        #cookie-consent-banner button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 5px 15px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</div>    
+

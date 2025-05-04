@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.seguranca.redes.RedesApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 15.85 s -- in com.seguranca.redes.RedesApplicationTests

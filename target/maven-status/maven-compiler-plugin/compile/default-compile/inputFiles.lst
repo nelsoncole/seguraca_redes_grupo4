@@ -1,0 +1,14 @@
+C:\Users\Nelson\Desktop\ISPI\redes\src\main\java\com\seguranca\redes\BrevoConfig.java
+C:\Users\Nelson\Desktop\ISPI\redes\src\main\java\com\seguranca\redes\controller\EmailController.java
+C:\Users\Nelson\Desktop\ISPI\redes\src\main\java\com\seguranca\redes\controller\IndexController.java
+C:\Users\Nelson\Desktop\ISPI\redes\src\main\java\com\seguranca\redes\controller\LoginController.java
+C:\Users\Nelson\Desktop\ISPI\redes\src\main\java\com\seguranca\redes\model\CodigoAutenticacao.java
+C:\Users\Nelson\Desktop\ISPI\redes\src\main\java\com\seguranca\redes\model\LoginTentativa.java
+C:\Users\Nelson\Desktop\ISPI\redes\src\main\java\com\seguranca\redes\model\Usuario.java
+C:\Users\Nelson\Desktop\ISPI\redes\src\main\java\com\seguranca\redes\RedesApplication.java
+C:\Users\Nelson\Desktop\ISPI\redes\src\main\java\com\seguranca\redes\repository\CodigoAutenticacaoRepository.java
+C:\Users\Nelson\Desktop\ISPI\redes\src\main\java\com\seguranca\redes\repository\LoginTentativaRepository.java
+C:\Users\Nelson\Desktop\ISPI\redes\src\main\java\com\seguranca\redes\repository\UsuarioRepository.java
+C:\Users\Nelson\Desktop\ISPI\redes\src\main\java\com\seguranca\redes\SecurityConfig.java
+C:\Users\Nelson\Desktop\ISPI\redes\src\main\java\com\seguranca\redes\service\EmailService.java
+C:\Users\Nelson\Desktop\ISPI\redes\src\main\java\com\seguranca\redes\service\LoginService.java
