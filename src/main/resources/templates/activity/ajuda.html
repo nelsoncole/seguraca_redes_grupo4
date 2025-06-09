@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajuda</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body class="ispi-2">
+    
+    <nav class="navbar">
+        <div>
+            <a href="/" class="ispi-icon-button">
+              <i class="fas fa-home"></i> Início
+            </a>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <a href="/notificacoes" title="Notificações" class="ispi-icon-button"><i class="fas fa-bell"></i></a>
+            <a href="/ajuda" title="Ajuda" class="ispi-icon-button"><i class="fas fa-question-circle"></i></a>
+        
+            <div class="ispi-user-menu">
+              <input type="checkbox" id="menuToggle" class="ispi-toggle">
+              <label for="menuToggle" class="ispi-user-button">
+                <img th:src="'https://ui-avatars.com/api/?name=' + ${session.usuarioNome}" alt="Avatar do Usuário">
+                <span th:text="${session.usuarioNome}">Nome</span> ▾
+              </label>
+              <div class="ispi-dropdown">
+                <a href="/perfil"><i class="fas fa-user"></i> Perfil</a>
+                <a href="/logout-manual"><i class="fas fa-sign-out-alt"></i> Sair</a>
+              </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sub Menu-->
+    <div class="ispi-submenu">
+        <a href="/usuarios"><i class="fas fa-tasks"></i> Usuarios</a>
+        <a href="/documentos-enviar"><i class="fas fa-upload"></i> Enviar Documento</a>
+        <a href="/tarefas-pendentes"><i class="fas fa-tasks"></i> Pendentes</a>
+        <a href="/tarefas-em-andamento"><i class="fas fa-spinner"></i> Em andamento</a>
+        <a href="/tarefas-concluidas"><i class="fas fa-check-circle"></i> Concluídas</a>
+    </div>
+
+    <!-- Conteudo -->
+    <div class="ispi-content-1" style="line-height: 1.8;">
+      <h2>Página de Ajuda</h2>
+      <p>Bem-vindo à central de ajuda do sistema.</p>
+
+      <hr>
+
+      <h3><i class="fas fa-user-shield"></i> Segurança e Acesso</h3>
+      <p>
+          Este sistema utiliza controle de sessão e autenticação segura por tentativas de login.
+          Caso sua sessão expire ou seja acessada de outro dispositivo, você será redirecionado
+          automaticamente para a tela de login por segurança.
+      </p>
+
+      <h3><i class="fas fa-tasks"></i> Submenu de Tarefas</h3>
+      <p>
+          O submenu superior permite acesso rápido a tarefas como:
+          <ul>
+              <li><strong>Usuários:</strong> Visualização e gestão de usuários do sistema.</li>
+              <li><strong>Enviar Documento:</strong> Upload de arquivos PDF ou imagens com até 2MB.</li>
+              <li><strong>Pendentes / Em Andamento / Concluídas:</strong> Gerenciamento de suas tarefas por status.</li>
+          </ul>
+      </p>
+
+      <h3><i class="fas fa-upload"></i> Envio de Documentos</h3>
+      <p>
+          Acesse a opção <strong>Enviar Documento</strong> no submenu para carregar arquivos PDF ou imagens (JPG/PNG),
+          com tamanho máximo de 2MB. Os documentos enviados ficam associados ao seu usuário.
+      </p>
+
+      <h3><i class="fas fa-bell"></i> Notificações</h3>
+      <p>
+          Use o ícone de sino no topo da página para visualizar suas notificações recentes.
+      </p>
+
+      <h3><i class="fas fa-question-circle"></i> Suporte</h3>
+      <p>
+          Em caso de dúvidas adicionais, clique neste ícone de ajuda ou entre em contato com o administrador do sistema.
+      </p>
+    </div>
+
+  
+    
+    <!-- Incluir o banner de cookies -->
+    <div th:replace="~{include/cookie-banner :: cookie-banner}"></div>
+</body>
+<div th:replace="~{include/scripts :: script}"></div>
+</html>

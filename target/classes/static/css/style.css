@@ -1,152 +1,330 @@
-/*Reset da formatação padrão*/
+/* Reset da formatação padrão */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 html, body {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
-/*Esta class centraliza o conteudo de*/
+/* 
+  Layouts centrais
+  ispi-1 -> para auth/login e criação de conta
+  ispi-2 -> para geral
+  ispi-3 -> para auth
+*/
+.ispi-1, .ispi-2, .ispi-3 {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+.ispi-2, .ispi-3{
+  background-color: #ffffff;
+}
+
+.ispi-1{
+  background-color: #cfcccc;
+}
+
 .ispi-1 {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    font-family: Arial, sans-serif;
-    background-color: #f0f2f5;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.ispi-2 {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    font-family: Arial, sans-serif;
-    background-color: #f0f2f5;
-}
-
-/*Esta class centraliza o conteudo de */
 .ispi-3 {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    font-family: Arial, sans-serif;
-    background-color: whitesmoke;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/*Cria uma caixina para input/output*/
+/* Caixa central */
 .ispi-container {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    text-align: center;
-    width: 360px;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  text-align: center;
+  width: 360px;
 }
 
-/*Cria uma area com elementos justificado*/
 .ispi-container-2 {
-    text-align: justify;
-    width: 360px;
-    font-family: 'Roboto', sans-serif; /* Fonte limpa e moderna */
-    font-size: 14px; /* Tamanho de fonte agradável */
-    color: #333; /* Cor do texto para bom contraste */
+  text-align: justify;
+  width: 360px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  color: #333;
 }
 
-/*Formatação do input*/
+/*Conteudo centralizado*/
+.ispi-content-1 {
+  margin-top: 20px;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  color: #333;
+}
+
+.ispi-content-sp {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.8;
+  align-items: center;
+}
+
+/* Input */
 .ispi-input-1 {
-    width: 90%;
-    margin: 8px 0;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: clamp(12px, 1.8vw, 14px); /*responsividade*/
+  width: 90%;
+  margin: 8px 0;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: clamp(12px, 1.8vw, 14px);
 }
 
-/*Formatcao do ipunt centraliza o texto*/
 .ispi-input-1-c {
-    text-align: center;
-    font-family: 'Roboto', sans-serif; /* Fonte limpa e moderna */
-    font-size: 16px; /* Tamanho de fonte agradável */
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
 }
 
-/*Formatação do botão OK*/
+/* Botões */
+.ispi-button-1, .ispi-button-2 {
+  padding: 10px 20px;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
 .ispi-button-1 {
-    padding: 10px 20px;
-    background-color: #3b82f6;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    display: block;        /* faz ele ocupar toda a largura disponível */
-    margin: 0 auto;        /* centraliza horizontalmente */
-    width: auto;           /* largura automática, conforme o conteúdo */
+  display: block;
+  margin: 0 auto;
+  width: auto;
 }
 
 .ispi-button-2 {
-    padding: 10px 20px;
-    background-color: #3b82f6;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    display: block;
-    width: 90%;
-    font-family: 'Roboto', sans-serif; /* Fonte limpa e moderna */
-    font-size: 16px; /* Tamanho de fonte agradável */
+  display: block;
+  width: 90%;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
 }
 
-.ispi-button-1:hover,
-.ispi-button-2:hover {
-    background-color: #1a996f;
+.ispi-button-1:hover, .ispi-button-2:hover {
+  background-color: #1a996f;
 }
+
+.ispi-botao-suave {
+  background: #4da6ff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.ispi-botao-suave:hover {
+  background: #3399ff;
+}
+
+
 
 .ispi-link-1 {
-    margin-top: 8px;
+  margin-top: 8px;
 }
 
 .erro {
-    color: red;
-    margin-bottom: 10px;
+  color: red;
+  margin-bottom: 10px;
 }
 
+/* Navbar */
 .navbar {
-    background-color: #333;
-    overflow: hidden;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-    display: flex;
-    justify-content: flex-end; /* alinha à direita */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1e2a38;
+  color: white;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ddd;
+  font-family: Arial, sans-serif;
 }
 
 .navbar a {
-    color: #f2f2f2;
-    text-align: center;
-    padding: 14px 20px;
-    text-decoration: none;
-    border-left: 1px solid #444; /* linha separadora */
+  margin-right: 15px;
+  text-decoration: none;
+  color: white;
 }
 
-.navbar a:first-child {
-    border-left: none; /* remove a linha do primeiro */
+/* Menu do usuário com toggle */
+.ispi-user-menu {
+  position: relative;
+  display: inline-block;
 }
 
-.navbar a:hover {
-    background-color: #575757;
+
+.ispi-toggle {
+  display: none;
 }
 
+.ispi-user-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: white;
+  padding: 8px;
+}
+
+.ispi-user-button:hover {
+  background-color: #1e2a38;
+  color: blue;
+}
+
+.ispi-user-button img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.ispi-dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 110%;
+  background-color: #fff;
+  min-width: 150px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border: 1px solid #ddd;
+  z-index: 1000;
+}
+
+.ispi-toggle:checked + .ispi-user-button + .ispi-dropdown {
+  display: block;
+}
+
+.ispi-dropdown a {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: #333;
+}
+
+.ispi-dropdown a:hover {
+  background-color: #f0f0f0;
+}
+
+.ispi-dropdown a i {
+  margin-right: 8px;
+}
+
+.ispi-icon-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #000;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+
+.ispi-icon-button:hover {
+  background-color: #1e2a38;
+  color: blue;
+}
+
+
+.ispi-submenu {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  background-color: #2c3e50;
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+  font-family: Arial, sans-serif;
+}
+
+.ispi-submenu a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.ispi-submenu a i {
+  margin-right: 6px;
+}
+
+.ispi-submenu a:hover {
+  background-color: #2c3e50;
+  color: blue;
+}
+/*Tabela*/
+.ispi-tabela {
+  border-collapse: collapse;
+  margin: 0 auto;
+  width: auto;
+  max-width: 90vw;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ispi-tabela th,
+.ispi-tabela td {
+  min-height: 0; /* Define a altura das células, ajuste com o conteudo */
+  border-bottom: 1px solid #ddd;
+  padding: 10px 16px;
+  font-size: 10pt;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.ispi-tabela th {
+  font-weight: bold;
+  text-align: center;
+  background-color: #007BFF;
+  color: white;
+}
+
+.ispi-tabela td {
+  text-align: left;
+}
+
+.ispi-tabela tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+
+
+.ispi-linha-1 {
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+  max-width: 500px;
+  background-color: #007BFF;
+  color: white;
+  font-weight: bold; /* negrito */
+  padding: 4px 6px;
+  border-radius: 8px;
+  border: 1px solid #ccc; /* borda sutil */
+  margin: 5px 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* sombra leve */
+}
+
+/* Espaçamento do conteúdo */
 .content {
-    padding-top: 60px; /* espaço pro menu fixo */
+  padding-top: 60px;
 }

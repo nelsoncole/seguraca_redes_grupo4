@@ -37,7 +37,7 @@ public class Usuario {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "nivel_acesso", nullable = false)
-    private NivelAcesso nivelAcesso = NivelAcesso.CLIENTE;
+    private NivelAcesso nivelAcesso = NivelAcesso.NIVEL2;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -94,10 +94,21 @@ public class Usuario {
     
     // Enum
     public enum NivelAcesso {
-        ADMINISTRADOR,
-        SECRETARIO,
-        TECNICO,
-        CLIENTE
+        ADMIN(0),
+        NIVEL1(1),
+        NIVEL2(2);
+    
+        private final int nivel;
+    
+        // Construtor para definir o valor
+        NivelAcesso(int nivel) {
+            this.nivel = nivel;
+        }
+    
+        // Método para obter o valor numérico
+        public int getNivel() {
+            return nivel;
+        }
     }
     
 }

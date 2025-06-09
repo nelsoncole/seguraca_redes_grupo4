@@ -14,11 +14,12 @@
 		<!-- Exibe de sucesso se houver -->
 		<p th:if="${sucesso}" style="color:blue;" th:text="${sucesso}"></p>
 				
-        <form method="POST" th:action="@{/criar-conta}">
+        <form method="POST" th:action="@{/criar-conta}" onsubmit="return verificarSenhas();">
             <input type="text" class="ispi-input-1" name="nome" placeholder="Nome de usuário, primeiro e último" required><br>
             <input type="email" class="ispi-input-1" name="email" placeholder="E-mail" required><br>
-            <input type="password" class="ispi-input-1" name="senha" placeholder="Senha" required><br>
-            <input type="password" class="ispi-input-1" name="senha_confirmada" placeholder="Confirmar Senha" required><br>
+            <input type="password" class="ispi-input-1" id="senha" name="senha" placeholder="Senha" required minlength="6"><br>
+            <input type="password" class="ispi-input-1" id="senha_confirmada" name="senha_confirmada" placeholder="Confirmar Senha" required minlength="6"><br>
+            <p id="erroSenha" style="color: red; display: none;">As senhas não coincidem.</p>
             <button type="submit" class="ispi-button-1">Criar Conta</button>
         </form>
 		<div class="ispi-link-1">
@@ -27,7 +28,21 @@
     </div>
 	
     <!-- Incluir o banner de cookies -->
-    <div th:replace="include/cookie-banner :: cookie-banner"></div>
+    <div th:replace="~{include/cookie-banner :: cookie-banner}"></div>
 </body>
+<script>
+    function verificarSenhas() {
+        const senha = document.getElementById("senha").value;
+        const senhaConfirmada = document.getElementById("senha_confirmada").value;
+        const erro = document.getElementById("erroSenha");
+
+        if (senha !== senhaConfirmada) {
+            erro.style.display = "block";
+            return false;
+        }
+        erro.style.display = "none";
+        return true;
+    }
+</script>
 </html>
     

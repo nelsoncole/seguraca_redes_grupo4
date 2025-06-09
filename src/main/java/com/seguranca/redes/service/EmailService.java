@@ -25,20 +25,27 @@ public class EmailService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("api-key", brevoConfig.getBrevoApiKey());
 
+        System.out.println("API KEY: " + brevoConfig.getBrevoApiKey());
+    
         Map<String, Object> email = new HashMap<>();
         email.put("sender", Map.of("name", "Grupo 4 Segurança de Redes", "email", "nelsocole@gmail.com"));
         email.put("to", List.of(Map.of("email", para)));
         email.put("subject", assunto);
         email.put("htmlContent", conteudoHtml);
-
+    
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(email, headers);
-
-        ResponseEntity<String> response = restTemplate.postForEntity(BREVO_URL, request, String.class);
-
-        if (response.getStatusCode().is2xxSuccessful()) {
-            System.out.println("E-mail enviado com sucesso!");
-        } else {
-            System.out.println("Erro ao enviar e-mail: " + response.getBody());
+    
+        try {
+            ResponseEntity<String> response = restTemplate.postForEntity(BREVO_URL, request, String.class);
+            if (response.getStatusCode().is2xxSuccessful()) {
+                System.out.println("E-mail enviado com sucesso!");
+            } else {
+                System.out.println("Erro ao enviar e-mail: " + response.getStatusCode() + " - " + response.getBody());
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao enviar e-mail: " + e.getMessage());
+            e.printStackTrace();
         }
     }
+    
 }

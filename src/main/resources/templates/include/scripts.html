@@ -1,0 +1,43 @@
+<!-- templates/include/scripts.html -->
+<th:block th:fragment="script">
+    <script>
+        // menu
+        document.addEventListener('click', function(event) {
+            const toggle = document.getElementById('menuToggle');
+            const menu = document.querySelector('.ispi-user-menu');
+            if (toggle?.checked && !menu.contains(event.target)) {
+                toggle.checked = false;
+            }
+        });
+
+        // Função para obter o valor de um cookie por nome
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        // Tempo da sessão em segundos
+        let tempo = 600;
+        let contador = tempo;
+
+        function resetTimer() {
+            contador = tempo;
+            fetch("/ping");
+        }
+
+        ['click', 'mousemove', 'keydown', 'scroll', 'touchstart'].forEach(evt => {
+            document.addEventListener(evt, resetTimer, true);
+        });
+
+        function verificarSessao() {
+            contador--;
+            if (contador === 0) {
+                alert("Sessão expirada! Redirecionando...");
+                location.href = "/logout-manual";
+            }
+        }
+
+        setInterval(verificarSessao, 1000);
+    </script>
+</th:block>

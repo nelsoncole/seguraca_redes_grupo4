@@ -27,7 +27,7 @@
         </div>
     </div>
     <!-- Incluir o banner de cookies -->
-    <div th:replace="include/cookie-banner :: cookie-banner"></div>
+    <div th:replace="~{include/cookie-banner :: cookie-banner}"></div>
 </body>
 <script th:inline="javascript">
     // Obtém o tempo restante que foi passado do backend (Thymeleaf)

@@ -1,7 +1,4 @@
 package com.seguranca.redes.controller;
-
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -21,6 +18,7 @@ import com.seguranca.redes.repository.UsuarioRepository;
 import com.seguranca.redes.service.LoginService;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -79,7 +77,8 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute Usuario usuario, Model model, HttpSession session, HttpServletResponse response) {
+    public String login(@ModelAttribute Usuario usuario, Model model, HttpSession session,
+    HttpServletResponse response, HttpServletRequest request) {
         Usuario usuarioBanco = usuarioRepository.findByEmail(usuario.getEmail()).orElse(null);
 
         if (usuarioBanco == null) {
@@ -89,6 +88,10 @@ public class LoginController {
 
     
         boolean senhaCorreta = passwordEncoder.matches(usuario.getSenha(), usuarioBanco.getSenha());
+        
+        // Invalida a sessão atual e cria uma nova para evitar Session Fixation
+        session.invalidate();
+        session = request.getSession(true); // nova sessão
         String sessionId = session.getId();
 
         Long userId = usuarioBanco.getId();
@@ -125,13 +128,67 @@ public class LoginController {
             // Se login for bem-sucedido, apaga tentativas falhas
             loginService.deletarFalhasPorUsuario(usuarioBanco.getId());
 
-            return "redirect:/enviar-login?destino=" + URLEncoder.encode(usuario.getEmail(), StandardCharsets.UTF_8);
+            return "redirect:/enviar-login";
         }
         
         loginTentativaRepository.save(tentativa);
 
+        // segundo teste, isto garante que bloquea na 4 tentativa
+        limite = LocalDateTime.now().minusMinutes(15);
+        tentativas = loginTentativaRepository.countRecentesFalhas(userId, limite);
+
+        if (tentativas >= 4) {
+            LocalDateTime ultima = loginTentativaRepository.ultimaTentativa(userId);
+            long restante = 15 * 60 - Duration.between(ultima, LocalDateTime.now()).getSeconds();
+            long min = restante / 60;
+            long seg = restante % 60;
+
+            // Adiciona o tempo restante no modelo para usar no Thymeleaf
+            model.addAttribute("tempoRestante", restante);  // Aqui é o valor do tempo restante
+            model.addAttribute("erro", "Excedeu as tentativas. Tente novamente em " + min + " min e " + seg + " s.");
+            return "auth/login";
+        }
+
         model.addAttribute("erro", "Senha incorreta.");
         return "auth/login";
+    }
+
+    // Esta funcao serve para fazer o login apos a criacao da nova conta
+    public Boolean loginAuto(Usuario usuarioBanco, HttpSession session, HttpServletResponse response) {
+    
+        boolean senhaCorreta = true;
+        String sessionId = session.getId();
+        Long userId = usuarioBanco.getId();
+       
+        
+        // Registra tentativa de login
+        LoginTentativa tentativa = new LoginTentativa();
+        tentativa.setUsuario(usuarioBanco);
+        tentativa.setSessionId(sessionId);
+        tentativa.setTentativaEm(LocalDateTime.now());
+        tentativa.setSucesso(senhaCorreta);
+
+        loginTentativaRepository.save(tentativa);
+            
+            
+        String nome = usuarioBanco.getNome();
+        String email = usuarioBanco.getEmail();
+        int nivel = usuarioBanco.getNivelAcesso().getNivel();
+
+        session.setAttribute("usuarioId", userId);
+        Cookie cookie = new Cookie("usuarioId", sessionId);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false); // true se usar HTTPS, false para HTTP em desenvolvimento
+        cookie.setMaxAge(600); // Expiração de cookie em 10 minitos
+        cookie.setPath("/");
+        response.addCookie(cookie);
+
+        // Salvar dados de uso gerais na sessão
+        session.setAttribute("usuarioNome", nome);
+        session.setAttribute("usuarioEmail", email);
+        session.setAttribute("usuarioNivel", nivel);
+
+        return true;
     }
 
     
@@ -156,7 +213,7 @@ public class LoginController {
             session.setAttribute("classUsuario", usuario);
 
             model.addAttribute("sucesso", "Conta criada com sucesso!");
-            return "redirect:/enviar?destino=" + URLEncoder.encode(usuario.getEmail(), StandardCharsets.UTF_8);
+            return "redirect:/enviar";
 
             //return "redirect:/login"; // Redireciona para a página de login após sucesso
         } catch (Exception e) {

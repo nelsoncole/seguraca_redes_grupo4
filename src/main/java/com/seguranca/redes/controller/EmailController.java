@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +38,13 @@ public class EmailController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private LoginController loginController;
+
+    @Autowired
+    private final PasswordEncoder hashEncoder = new BCryptPasswordEncoder();
+
+
     private String gerarCodigoDeAutenticacao() {
         Random random = new Random();
         int codigo = 100000 + random.nextInt(900000); // Gera um código de 6 dígitos
@@ -43,13 +52,24 @@ public class EmailController {
     }
 
     @GetMapping("/enviar")
-    public String enviar(@RequestParam String destino, Model model) {
+    public String enviar(HttpSession session, Model model) {
+
+        // Recupera o objeto Usuario da sessão
+        Usuario usuario = (Usuario) session.getAttribute("classUsuario");
+        
+        if (usuario == null) {
+            model.addAttribute("erro", "Ocorreu um erro inesperado.");
+            return "auth/criar_conta";
+        }
+
+        String destino = usuario.getEmail();
         String codigo = gerarCodigoDeAutenticacao();
+        String codigoCriptografado = hashEncoder.encode(codigo);
 
         // Salva o código no banco de dados
         CodigoAutenticacao codigoAutenticacao = new CodigoAutenticacao();
         codigoAutenticacao.setDestino(destino);
-        codigoAutenticacao.setCodigo(codigo);
+        codigoAutenticacao.setCodigo(codigoCriptografado);
         codigoAutenticacao.setDataGeracao(LocalDateTime.now());
         codigoRepository.save(codigoAutenticacao);
 
@@ -70,13 +90,22 @@ public class EmailController {
     }
 
     @GetMapping("/enviar-login")
-    public String enviarLogin(@RequestParam String destino, Model model) {
+    public String enviarLogin(HttpSession session, Model model) {
+        // Recupera o objeto Usuario da sessão
+        LoginTentativa tentativa = (LoginTentativa) session.getAttribute("classTentativa");
+        
+        if (tentativa == null) {
+            model.addAttribute("erro", "Ocorreu um erro inesperado. Por favor, tente novamente.");
+            return "auth/login";
+        }
+        String destino = tentativa.getUsuario().getEmail();
         String codigo = gerarCodigoDeAutenticacao();
+        String codigoCriptografado = hashEncoder.encode(codigo);
 
         // Salva o código no banco de dados
         CodigoAutenticacao codigoAutenticacao = new CodigoAutenticacao();
         codigoAutenticacao.setDestino(destino);
-        codigoAutenticacao.setCodigo(codigo);
+        codigoAutenticacao.setCodigo(codigoCriptografado);
         codigoAutenticacao.setDataGeracao(LocalDateTime.now());
         codigoRepository.save(codigoAutenticacao);
 
@@ -96,40 +125,58 @@ public class EmailController {
         return "auth/auth_login";
     }
 
-
+    // Verificar email da nova conta
     @PostMapping("/verificar")
     public String verificar(@RequestParam String destino, @RequestParam String codigo,
-        HttpSession session, Model model) {
+        HttpSession session, Model model, HttpServletResponse response) {
         Optional<CodigoAutenticacao> codigoSalvoOptional = codigoRepository.findFirstByDestinoOrderByDataGeracaoDesc(destino);
 
         if (codigoSalvoOptional.isPresent()) {
             CodigoAutenticacao codigoSalvo = codigoSalvoOptional.get();
-            // use codigoSalvo normalmente
-            if (codigoSalvo != null && codigoSalvo.isValido() && codigoSalvo.getCodigo().equals(codigo)) {
-                // Código correto e dentro do prazo
-                // Remove o código após a validação
-                codigoRepository.delete(codigoSalvo);
+            
+            if (codigoSalvo != null) {
 
-                try {
-                    // Recupera o objeto Usuario da sessão
-                    Usuario usuario = (Usuario) session.getAttribute("classUsuario");
-        
-                    if (usuario == null) {
-                        model.addAttribute("erro", "Sessão expirada ou inválida. Por favor, refaça o cadastro.");
+                boolean valido = hashEncoder.matches(codigo, codigoSalvo.getCodigo());
+                // use codigoSalvo normalmente
+                if (codigoSalvo.isValido() && valido) {
+                    // Código correto e dentro do prazo
+                    // Remove o código após a validação
+                    codigoRepository.delete(codigoSalvo);
+
+                    try {
+                        // Recupera o objeto Usuario da sessão
+                        Usuario usuario = (Usuario) session.getAttribute("classUsuario");
+            
+                        if (usuario == null) {
+                            model.addAttribute("erro", "Sessão expirada ou inválida. Por favor, refaça o cadastro.");
+                            return "auth/criar_conta";
+                        }
+            
+                        String email = usuario.getEmail();
+                        // Salva o usuário no banco
+                        usuarioRepository.save(usuario);
+                        // Limpa a sessão após salvar, se desejar
+                        session.removeAttribute("classUsuario");
+
+                        Usuario usuarioBanco = usuarioRepository.findByEmail(email).orElse(null);
+
+                        if (usuarioBanco == null) {
+                            model.addAttribute("erro", "Usuário não encontrado.");
+                            return "auth/login";
+                        }
+
+                        if(loginController.loginAuto(usuarioBanco, session, response)){
+                            return "redirect:/";
+                        }
+
+                        model.addAttribute("erro", "Usuário não encontrado.");
+                        return "auth/login";
+            
+                
+                    } catch (Exception e) {
+                        model.addAttribute("erro", "Erro ao salvar usuário.");
                         return "auth/criar_conta";
                     }
-        
-                    // Salva o usuário no banco
-                    usuarioRepository.save(usuario);
-        
-                    // Limpa a sessão após salvar, se desejar
-                    session.removeAttribute("classUsuario");
-        
-                    model.addAttribute("sucesso", "Conta criada com sucesso!");
-                    return "redirect:/login";
-                } catch (Exception e) {
-                    model.addAttribute("erro", "Erro ao salvar usuário.");
-                    return "auth/criar_conta";
                 }
             }
         }
@@ -156,35 +203,49 @@ public class EmailController {
 
         if (codigoSalvoOptional.isPresent()) {
             CodigoAutenticacao codigoSalvo = codigoSalvoOptional.get();
-            // use codigoSalvo normalmente
-            if (codigoSalvo != null && codigoSalvo.isValido() && codigoSalvo.getCodigo().equals(codigo)) {
-                // Código correto e dentro do prazo
-                // Remove o código após a validação
-                codigoRepository.delete(codigoSalvo);
+            if (codigoSalvo != null) {
 
-                try {
-                    
-                    // Salva o login no banco
-                    loginTentativaRepository.save(tentativa);
+                boolean valido = hashEncoder.matches(codigo, codigoSalvo.getCodigo());
+                // use codigoSalvo normalmente
+                if (codigoSalvo.isValido() && valido) {
+                    // Código correto e dentro do prazo
+                    // Remove o código após a validação
+                    codigoRepository.delete(codigoSalvo);
 
-                    String sessionId = tentativa.getSessionId();
-                    Long userId = tentativa.getUsuario().getId();
+                    try {
+                        
+                        // Salva o login no banco
+                        loginTentativaRepository.save(tentativa);
 
-                    session.setAttribute("usuarioId", userId);
-                    Cookie cookie = new Cookie("usuarioId", sessionId);
-                    cookie.setHttpOnly(true);
-                    cookie.setSecure(false); // true se usar HTTPS
-                    cookie.setMaxAge(600); // Expiração de cookie em 10 minitos
-                    cookie.setPath("/");
-                    response.addCookie(cookie);
-        
-                    // Limpa a sessão após salvar, se desejar
-                    session.removeAttribute("classTentativa");
-                    return "redirect:/";
+                        String sessionId = tentativa.getSessionId();
+                        Long userId = tentativa.getUsuario().getId();
+                        String nome = tentativa.getUsuario().getNome();
+                        String email = tentativa.getUsuario().getEmail();
+                        int nivel = tentativa.getUsuario().getNivelAcesso().getNivel();
 
-                } catch (Exception e) {
-                    model.addAttribute("erro", "Erro ao salvar login.");
-                    return "auth/login";
+                        session.setAttribute("usuarioId", userId);
+                        Cookie cookie = new Cookie("usuarioId", sessionId);
+                        cookie.setHttpOnly(true);
+                        cookie.setSecure(false); // true se usar HTTPS, false para HTTP em desenvolvimento
+                        cookie.setMaxAge(600); // Expiração de cookie em 10 minitos
+                        cookie.setPath("/");
+                        response.addCookie(cookie);
+            
+                        // Limpa a sessão após salvar, para maior seguraça
+                        session.removeAttribute("classTentativa");
+
+
+                        // Salvar dados de uso gerais na sessão
+                        session.setAttribute("usuarioNome", nome);
+                        session.setAttribute("usuarioEmail", email);
+                        session.setAttribute("usuarioNivel", nivel);
+
+                        return "redirect:/";
+
+                    } catch (Exception e) {
+                        model.addAttribute("erro", "Erro ao salvar login.");
+                        return "auth/login";
+                    }
                 }
             }
         }

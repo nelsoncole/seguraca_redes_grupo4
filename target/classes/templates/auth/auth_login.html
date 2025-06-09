@@ -35,7 +35,7 @@
     </div>
 
     <!-- Incluir o banner de cookies -->
-    <div th:replace="include/cookie-banner :: cookie-banner"></div>
+    <div th:replace="~{include/cookie-banner :: cookie-banner}"></div>
 </body>
 <script th:inline="javascript">
     let tempoRestante = 300-1; // 5 minutos
